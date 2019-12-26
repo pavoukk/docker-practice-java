@@ -1,0 +1,41 @@
+version: '3.7'
+
+services:
+  postgres-service:
+    image: postgres
+    container_name: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    networks:
+      - docker-practice-net
+    volumes:
+      - ./../../data/postgres:/var/lib/postgresql/data
+      - ./../../data/dump:/db-dump
+    environment:
+      POSTGRES_PASSWORD: school
+      POSTGRES_USER: postgres
+      POSTGRES_DB: school
+
+  redis-service:
+    image: redis
+    container_name: redis
+    restart: always
+    ports:
+      - 6379:6379
+    networks:
+      - docker-practice-net
+
+  example-service:
+    build:
+      context: ./images/app/example-service/
+      dockerfile: Dockerfile
+    container_name: example-service
+    restart: always
+    ports:
+      - 8888:8888
+    networks:
+      - docker-practice-net
+
+networks:
+  docker-practice-net:
